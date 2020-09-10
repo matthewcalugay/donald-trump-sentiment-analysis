@@ -5,7 +5,7 @@ Spyder Editor
 This is a temporary script file.
 """
 
-"""READ: WIP"""
+#Read: WIP
 
 import GetOldTweets3 as got
 import pandas as pd
@@ -25,21 +25,21 @@ import datetime
 ----------------- WordCloud Visual of Trump's Twitter -----------------
 --------------------------------------------------------------------"""
 
-"""Username of Twitter Account to scrape and Count of Tweets"""
+#Username of Twitter Account to scrape and Count of Tweets
 username = "@realDonaldTrump"
 count = 10000
 
-"""Setting up the TweetCriteria"""
+#Setting up the TweetCriteria
 tweetCriteria = got.manager.TweetCriteria().setUsername(username).setMaxTweets(count)
     
-"""List of Tweets with Timestamps and Tweet Text"""
+#List of Tweets with Timestamps and Tweet Text
 tweets = got.manager.TweetManager.getTweets(tweetCriteria)
 
-"""Timestamped + Tweet, Tweet"""
+#Timestamped + Tweet, Tweet
 text_tweets = [[x.date, x.text] for x in tweets]
 puretext = [x.text for x in tweets]
 
-"""Generating Wordcloud of Last 10000 Tweets"""
+#Generating Wordcloud of Last 10000 Tweets
 puretextString = " ".join(puretext)
 wordcloud = WordCloud().generate(puretextString)
 
@@ -47,7 +47,7 @@ plt.imshow(wordcloud, interpolation="bilinear")
 plt.axis("off")
 plt.show()
 
-"""Setting up Stop Words"""
+#Setting up Stop Words
 stopwords = list(stopwords.words("english")) 
 wordtokenize = word_tokenize(puretextString.lower())
 
@@ -56,15 +56,15 @@ stopwords.append("you")
 stopwords.append("That")
 stopwords.append("We")
 
-"""Empty list for words"""
+#Empty list for words
 djTrumpNoFiller = []
 
-"""Filter out common words"""
+#Filter out common words
 for x in wordtokenize:
     if x not in stopwords:
         djTrumpNoFiller.append(x)
  
-"""Filtered word cloud"""       
+#Filtered word cloud
 filteredPureTextString = " ".join(djTrumpNoFiller)
 filteredWordcloud = WordCloud().generate(filteredPureTextString)
 
@@ -73,7 +73,7 @@ plt.axis("off")
 plt.show()
 
 
-"""American Flag"""
+#American Flag
 mask = np.array(Image.open(r"AmericanFlag.png"))
 
 americanFlagWordCloud = WordCloud(stopwords=stopwords, background_color="white", \
@@ -82,7 +82,7 @@ americanFlagWordCloud = WordCloud(stopwords=stopwords, background_color="white",
 
 americanFlagWordCloud.generate(filteredPureTextString)
     
-"""Coloring"""
+#Coloring
 image_colors = ImageColorGenerator(mask)
 plt.figure(figsize=[10,10])
 plt.imshow(americanFlagWordCloud.recolor(color_func=image_colors), \
@@ -95,18 +95,18 @@ plt.show()
 ----------------------- Covid 19 Twitter Analysis ---------------------
 --------------------------------------------------------------------"""
 
-"""DataFrame of Timestamps and Tweets stored in Date, Tweet columns"""
+#DataFrame of Timestamps and Tweets stored in Date, Tweet columns
 tweet_df = pd.DataFrame(text_tweets, columns = ["Date", "Tweet"])
 
 
-"""Terms to search tweets"""
+#Terms to search tweets
 covid19TweetsCheckList = ["Covid", "Covid-19", "Covid19", "ChinaVirus", "Corona", \
                  "Coronavirus", "ChinaFlu", "KungFlu", "China Flu", "Kung Flu", 
                  "Virus", "Vaccine", "Vaccines", "Flu", "Disease", "Sickness", \
                      "Mask", "Masks"]
 
     
-"""DataFrame for storing Covid-Related Tweets"""
+#DataFrame for storing Covid-Related Tweets
 covid_df = pd.DataFrame(columns = ["Date", "Tweet"])
 
 conditions = False
@@ -119,11 +119,11 @@ covid_df = covid_df.drop(columns = "index")
 
 covid_df.to_csv("covidtweets.csv")
 
-"""Convert Date to Datetime"""
+#Convert Date to Datetime
 covid_df["Date"] = pd.to_datetime(covid_df["Date"], format = '%m/%d/%Y')
 covid_df["Date"] = covid_df["Date"].dt.tz_localize(None)
 
-"""Creating new DataFrame of Covid Related Tweets After March"""
+#Creating new DataFrame of Covid Related Tweets After March
 march_july_covid_df = pd.DataFrame(columns = ["Date", "Tweet"])
 
 dummydate = datetime.datetime(2020, 3, 1)
@@ -135,7 +135,7 @@ march_july_covid_df = covid_df.loc[conditions]
 
 march_july_covid_df["Time"] = march_july_covid_df["Date"].dt.strftime("%H")
 
-"""Frequency Distribution of Covid-Related Tweets By Hour of Day"""
+#Frequency Distribution of Covid-Related Tweets By Hour of Day
 hourOfDay_covid = nltk.FreqDist(march_july_covid_df["Time"])
 hourOfDay_covid_df = pd.DataFrame({"Hour Of Day": list(hourOfDay_covid.keys()), \
                       'Count': list(hourOfDay_covid.values())})
@@ -148,7 +148,7 @@ HOD_bg.set(ylabel = "Count")
 plt.show()
 
 
-"""------------------------------------------------------------------------"""
+#-----------------------------------------------------------------------------
 
 
 """ Covid 19 Cases, Deaths by Jurisdiction; 
@@ -166,10 +166,10 @@ covidPostMarch_df["Date"]= pd.to_datetime(covidPostMarch_df["Date"])
 covidPostMarch_df.plot(x = "Date", y = "new_cases", linewidth = 1, fontsize = 7)
 
 
-"""------------------------------------------------------------------------"""
+#-----------------------------------------------------------------------------
 
 
-"""Extracting Hashtags"""
+#Extracting Hashtags
 hashtagsDJT = []
 for x in puretext:
     hashtags = re.findall(r"#(\w+)", x)
@@ -185,7 +185,7 @@ HT_df = pd.DataFrame({'Hashtag': list(HTFreq.keys()), \
                       'Count': list(HTFreq.values())})
 
     
-"""Most Popular Hashtags"""
+#Most Popular Hashtags
 HT_top10 = HT_df.nlargest(columns="Count", n = 10) 
 
 plt.figure(figsize=(20,7))
@@ -236,7 +236,7 @@ for x in TS_sentiment.Date:
     conditions = conditions | (TS_sentiment.Date > dummydate)
 covid_Sent = TS_sentiment.loc[conditions]
 
-"""------------------------------------------------------------------------"""
+#-----------------------------------------------------------------------------
 
 covid_Sent["Date"] = covid_Sent["Date"].dt.date
 
