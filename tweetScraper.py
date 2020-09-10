@@ -73,8 +73,8 @@ plt.axis("off")
 plt.show()
 
 
-"""American Flag. Please download and save your own image when run locally."""
-mask = np.array(Image.open(r"C:\Users\matth\Pictures\AmericanFlag.png"))
+"""American Flag"""
+mask = np.array(Image.open(r"AmericanFlag.png"))
 
 americanFlagWordCloud = WordCloud(stopwords=stopwords, background_color="white", \
                           mode="RGBA", max_words=750, mask=mask, min_font_size = 2, \
@@ -157,7 +157,7 @@ plt.show()
     Includes only United States in country
     Filtered to exclude Jan, Feb """
     
-covidPostMarch_df = pd.read_csv(r"C:\Users\matth\Downloads\owid-covid-data1.csv", \
+covidPostMarch_df = pd.read_csv(r"owid-covid-data1.csv", \
                                 skiprows=[x for x in range(1,62)])
 
 covidPostMarch_df.rename(columns = {"date":"Date"}, inplace = True) 
